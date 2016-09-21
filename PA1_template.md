@@ -60,7 +60,11 @@ median(per_day$Total_Steps,na.rm=TRUE)
 ```r
 per_5_min<-aggregate(x=raw_data$steps,list(raw_data$interval),mean,na.rm=TRUE)
 names(per_5_min)<-c("min_interval","Total_Steps")
-plot(x=per_5_min$min_interval,y=per_5_min$Total_Steps,type="l")
+plot(x=per_5_min$min_interval,
+     y=per_5_min$Total_Steps,
+     type="l",
+     xlab="5 min interval",
+     ylab="Mean number of steps")
 max_interval=per_5_min$min_interval[
   which.max(per_5_min$Total_Steps)]
 max_value=max(per_5_min$Total_Steps)
@@ -89,12 +93,22 @@ sum(is.na(raw_data$steps))
 ## [1] 2304
 ```
 
-Replace missing values with median for that interval
+Replace missing values with mean for that interval
 
 ```r
 na_vector=is.na(raw_data$steps)
 replace_missing<-raw_data
-replace_missing$steps[na_vector]<-per_5_min$Total_Steps[na_vector]
+replace_missing$interval=as.factor(replace_missing$interval)
+per_5_min$min_interval=as.factor(per_5_min$min_interval)
+#Replace NA with mean from same interval
+replace_missing$steps[na_vector]=mean(
+  per_5_min$Total_Steps
+  [replace_missing$interval[na_vector]])
+sum(is.na(replace_missing$steps))
+```
+
+```
+## [1] 0
 ```
 
 Now create the histogram with the replaced dataset
@@ -117,14 +131,14 @@ hist(per_day$Total_Steps,
 abline(v=mean_per_day,lty="dashed",col="red")
 abline(v=median_per_day,lty="dashed",col="green")
 text(x=mean_per_day,
-     y=0,
+     y=20,
      labels=paste("Mean value: ",mean_per_day,"\n Median: ",median_per_day),
      pos=4)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
-Mean is NAand median is NA
+Mean is 1.0766189\times 10^{4}and median is 1.0766189\times 10^{4}
 
 ```r
 mean(per_day$Total_Steps,na.rm=TRUE)
@@ -140,7 +154,7 @@ median(per_day$Total_Steps,na.rm=TRUE)
 ```
 
 ```
-## [1] 10765.59
+## [1] 10766.19
 ```
 
 
@@ -165,11 +179,25 @@ library(lubridate)
 ```r
 replace_missing$Date<-ymd(replace_missing$date)
 #Use wday to detect if is Weekend (1 or 6) or Weekday
-replace_missing$day_type<-as.numeric(wday(replace_missing$date)==1 | wday(replace_missing$date)==6)
-replace_missing$day_type=factor(replace_missing$day_type,levels=c("weekday","weekend"))
+replace_missing$day_type<-as.numeric(wday(replace_missing$date)==1 | wday(replace_missing$date)==7)+1
+replace_missing$day_type=as.factor(replace_missing$day_type)
+levels(replace_missing$day_type)<-c("weekday","weekend")
 per_5_min_type<-aggregate(x=replace_missing$steps,
                           list(replace_missing$interval,
                                replace_missing$day_type),
-                          mean,na.rm=TRUE)
-names(per_5_min_type)<-c("min_interval","Total_Steps","Day type")
+                          mean)
+names(per_5_min_type)<-c("min_interval","day_type","Total_steps")
+library(lattice)
+xyplot(Total_steps ~ min_interval|day_type,
+       data=per_5_min_type,
+       layout=c(1,2),
+       type="l",
+       xlab="minute interval",
+       ylab="mean number of steps",
+       main="Mean number of steps per interval and type of day",
+       axis.padding=2
+       )
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+
