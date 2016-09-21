@@ -38,7 +38,7 @@ text(x=mean_per_day,
 
 ![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
-Mean is 1.0766189\times 10^{4}and median is 1.0766189\times 10^{4}
+Mean is 10766.189 and median is 10766.189
 
 ```r
 mean(per_day$Total_Steps,na.rm=TRUE)
@@ -85,7 +85,7 @@ text(x=max_interval,
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
-Max average number of steps, 206.17, happens at 5 min interval 835
+Max average number of steps, 206.170, happens at 5 min interval 835
 
 ## Imputing missing values
 
@@ -147,7 +147,7 @@ text(x=mean_per_day,
 
 ![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
-Mean is 1.0766189\times 10^{4}and median is 1.0766189\times 10^{4}
+Mean is 10766.189 and median is 10766.189
 
 Mean:
 

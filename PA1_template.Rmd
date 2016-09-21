@@ -39,7 +39,7 @@ text(x=mean_per_day,
      pos=4)
 ```
 
-Mean is `r round(mean_per_day,digits=3)`and median is `r round(median_per_day,digits=3)`
+Mean is `r sprintf("%.3f",mean_per_day)` and median is `r sprintf("%.3f",median_per_day)`
 ```{r}
 mean(per_day$Total_Steps,na.rm=TRUE)
 ```
@@ -73,7 +73,7 @@ text(x=max_interval,
      pos=4)
 ```
 
-Max average number of steps, `r round(max_value,digits=3)`, happens at 5 min interval `r max_interval`
+Max average number of steps, `r sprintf("%.3f",max_value)`, happens at 5 min interval `r max_interval`
 
 ## Imputing missing values
 
@@ -122,7 +122,7 @@ text(x=mean_per_day,
      pos=4)
 ```
 
-Mean is `r round(mean_per_day,digits=3)`and median is `r round(median_per_day,digits=3)`
+Mean is `r sprintf("%.3f",mean_per_day)` and median is `r sprintf("%.3f",median_per_day)`
 
 Mean:
 ```{r}
