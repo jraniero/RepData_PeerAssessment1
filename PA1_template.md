@@ -29,7 +29,10 @@ abline(v=mean_per_day,lty="dashed",col="red")
 abline(v=median_per_day,lty="dashed",col="green")
 text(x=mean_per_day,
      y=20,
-     labels=paste("Mean value: ",mean_per_day,"\n Median: ",median_per_day),
+     labels=paste("Mean value: ",
+                  round(mean_per_day,digits=3),
+                  "\n Median: ",
+                  round(median_per_day,digits=3)),
      pos=4)
 ```
 
@@ -73,13 +76,16 @@ abline(v=max_interval,
        lty="dashed")
 text(x=max_interval,
      y=max_value-50,
-     labels=paste("Max value: ",max_value,"\n At interval: ",max_interval),
+     labels=paste("Max value: ",
+                  round(max_value,digits=3),
+                  "\n At interval: ",
+                  max_interval),
      pos=4)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
-Max average number of steps, 206.1698113, happens at 5 min interval 835
+Max average number of steps, 206.17, happens at 5 min interval 835
 
 ## Imputing missing values
 
@@ -132,13 +138,18 @@ abline(v=mean_per_day,lty="dashed",col="red")
 abline(v=median_per_day,lty="dashed",col="green")
 text(x=mean_per_day,
      y=20,
-     labels=paste("Mean value: ",mean_per_day,"\n Median: ",median_per_day),
+     labels=paste("Mean value: ",
+                  round(mean_per_day,digits=3),
+                  "\n Median: ",
+                  round(median_per_day,digits=3)),
      pos=4)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 Mean is 1.0766189\times 10^{4}and median is 1.0766189\times 10^{4}
+
+Mean:
 
 ```r
 mean(per_day$Total_Steps,na.rm=TRUE)
@@ -156,7 +167,7 @@ median(per_day$Total_Steps,na.rm=TRUE)
 ```
 ## [1] 10766.19
 ```
-
+As we are replacing the missing values with the average value per minute interval, there is no difference between the two sets (the one with missing values and the one with replaced values)
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -187,6 +198,8 @@ per_5_min_type<-aggregate(x=replace_missing$steps,
                                replace_missing$day_type),
                           mean)
 names(per_5_min_type)<-c("min_interval","day_type","Total_steps")
+#De-factor min_interval so that lattice plot considers it as numer
+per_5_min_type$min_interval<-as.numeric(levels(per_5_min_type$min_interval))
 library(lattice)
 xyplot(Total_steps ~ min_interval|day_type,
        data=per_5_min_type,
@@ -194,10 +207,10 @@ xyplot(Total_steps ~ min_interval|day_type,
        type="l",
        xlab="minute interval",
        ylab="mean number of steps",
-       main="Mean number of steps per interval and type of day",
-       axis.padding=2
+       main="Mean number of steps per interval and type of day"
        )
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
+We do observe that average steps on weekdays peak on the morning and here and there on the afternoon. However on weekends, there are numerous peaks of activity throughout the day
