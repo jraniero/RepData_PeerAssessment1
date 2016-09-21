@@ -1,13 +1,9 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
-```{r}
+
+```r
 download.file(url="https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip", destfile="download.zip")
 unzip("download.zip")
 raw_data<-read.csv("activity.csv",stringsAsFactors = FALSE)
@@ -15,7 +11,8 @@ raw_data<-read.csv("activity.csv",stringsAsFactors = FALSE)
 
 
 ## What is mean total number of steps taken per day?
-```{r}
+
+```r
 per_day<-aggregate(x=raw_data$steps,
                    list(raw_data$date),
                    sum)
@@ -36,18 +33,31 @@ text(x=mean_per_day,
      pos=4)
 ```
 
-Mean is `r mean_per_day`and median is `r median_per_day`
-```{r}
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
+Mean is 1.0766189\times 10^{4}and median is 1.0766189\times 10^{4}
+
+```r
 mean(per_day$Total_Steps,na.rm=TRUE)
 ```
+
+```
+## [1] 10766.19
+```
 Median:
-```{r}
+
+```r
 median(per_day$Total_Steps,na.rm=TRUE)
+```
+
+```
+## [1] 10765
 ```
 
 
 ## What is the average daily activity pattern?
-```{r}
+
+```r
 per_5_min<-aggregate(x=raw_data$steps,list(raw_data$interval),mean,na.rm=TRUE)
 names(per_5_min)<-c("min_interval","Total_Steps")
 plot(x=per_5_min$min_interval,y=per_5_min$Total_Steps,type="l")
@@ -63,17 +73,25 @@ text(x=max_interval,
      pos=4)
 ```
 
-Max average number of steps, `r max_value`, happens at 5 min interval `r max_interval`
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
+Max average number of steps, 206.1698113, happens at 5 min interval 835
 
 ## Imputing missing values
 
 Number of missing values in the set:
-```{r}
+
+```r
 sum(is.na(raw_data$steps))
 ```
 
+```
+## [1] 2304
+```
+
 Replace missing values with median for that interval
-```{r}
+
+```r
 na_vector=is.na(raw_data$steps)
 replace_missing<-raw_data
 replace_missing$steps[na_vector]<-per_5_min$Total_Steps[na_vector]
@@ -81,7 +99,8 @@ replace_missing$steps[na_vector]<-per_5_min$Total_Steps[na_vector]
 
 Now create the histogram with the replaced dataset
 
-```{r}
+
+```r
 per_day<-aggregate(x=replace_missing$steps,
                    list(replace_missing$date),
                    sum)
@@ -103,32 +122,54 @@ text(x=mean_per_day,
      pos=4)
 ```
 
-Mean is `r mean_per_day`and median is `r median_per_day`
-```{r}
+![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+
+Mean is NAand median is NA
+
+```r
 mean(per_day$Total_Steps,na.rm=TRUE)
 ```
+
+```
+## [1] 10766.19
+```
 Median:
-```{r}
+
+```r
 median(per_day$Total_Steps,na.rm=TRUE)
+```
+
+```
+## [1] 10765.59
 ```
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r}
+
+```r
 library(lubridate)
+```
+
+```
+## 
+## Attaching package: 'lubridate'
+```
+
+```
+## The following object is masked from 'package:base':
+## 
+##     date
+```
+
+```r
 replace_missing$Date<-ymd(replace_missing$date)
 #Use wday to detect if is Weekend (1 or 6) or Weekday
-replace_missing$day_type<-as.numeric(wday(replace_missing$date)==1 | wday(replace_missing$date)==6)+1
-replace_missing$day_type=as.factor(replace_missing$day_type)
-levels(replace_missing$day_type)<-c("weekday","weekend")
+replace_missing$day_type<-as.numeric(wday(replace_missing$date)==1 | wday(replace_missing$date)==6)
+replace_missing$day_type=factor(replace_missing$day_type,levels=c("weekday","weekend"))
 per_5_min_type<-aggregate(x=replace_missing$steps,
                           list(replace_missing$interval,
                                replace_missing$day_type),
                           mean,na.rm=TRUE)
 names(per_5_min_type)<-c("min_interval","Total_Steps","Day type")
-# Basic Scatterplot Matrix
-pairs(~Total_Steps+day_type=per_5_min, 
-   main="Simple Scatterplot Matrix")
 ```
-
