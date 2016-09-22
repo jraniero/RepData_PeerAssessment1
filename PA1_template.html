@@ -186,7 +186,7 @@ text(x=max_interval,
 <p>Number of missing values in the set:</p>
 <pre class="r"><code>sum(is.na(raw_data$steps))</code></pre>
 <pre><code>## [1] 2304</code></pre>
-<p>Replace missing values with mean for that interval</p>
+<p>Replace missing values with mean for that interval, and check no NA remain afterwards</p>
 <pre class="r"><code>na_vector=is.na(raw_data$steps)
 replace_missing&lt;-raw_data
 replace_missing$interval=as.factor(replace_missing$interval)

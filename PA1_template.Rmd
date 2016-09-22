@@ -7,7 +7,7 @@ output:
 
 
 ## Loading and preprocessing the data
-```{r}
+```{r echo=TRUE}
 download.file(url="https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip", destfile="download.zip")
 unzip("download.zip")
 raw_data<-read.csv("activity.csv",stringsAsFactors = FALSE)
@@ -15,7 +15,7 @@ raw_data<-read.csv("activity.csv",stringsAsFactors = FALSE)
 
 
 ## What is mean total number of steps taken per day?
-```{r}
+```{r echo=TRUE}
 per_day<-aggregate(x=raw_data$steps,
                    list(raw_data$date),
                    sum)
@@ -40,17 +40,17 @@ text(x=mean_per_day,
 ```
 
 Mean is `r sprintf("%.3f",mean_per_day)` and median is `r sprintf("%.3f",median_per_day)`
-```{r}
+```{r echo=TRUE}
 mean(per_day$Total_Steps,na.rm=TRUE)
 ```
 Median:
-```{r}
+```{r echo=TRUE}
 median(per_day$Total_Steps,na.rm=TRUE)
 ```
 
 
 ## What is the average daily activity pattern?
-```{r}
+```{r echo=TRUE}
 per_5_min<-aggregate(x=raw_data$steps,list(raw_data$interval),mean,na.rm=TRUE)
 names(per_5_min)<-c("min_interval","Total_Steps")
 plot(x=per_5_min$min_interval,
@@ -78,12 +78,12 @@ Max average number of steps, `r sprintf("%.3f",max_value)`, happens at 5 min int
 ## Imputing missing values
 
 Number of missing values in the set:
-```{r}
+```{r echo=TRUE}
 sum(is.na(raw_data$steps))
 ```
 
-Replace missing values with mean for that interval
-```{r}
+Replace missing values with mean for that interval, and check no NA remain afterwards
+```{r echo=TRUE}
 na_vector=is.na(raw_data$steps)
 replace_missing<-raw_data
 replace_missing$interval=as.factor(replace_missing$interval)
@@ -97,7 +97,7 @@ sum(is.na(replace_missing$steps))
 
 Now create the histogram with the replaced dataset
 
-```{r}
+```{r echo=TRUE}
 per_day<-aggregate(x=replace_missing$steps,
                    list(replace_missing$date),
                    sum)
@@ -125,18 +125,18 @@ text(x=mean_per_day,
 Mean is `r sprintf("%.3f",mean_per_day)` and median is `r sprintf("%.3f",median_per_day)`
 
 Mean:
-```{r}
+```{r echo=TRUE}
 mean(per_day$Total_Steps,na.rm=TRUE)
 ```
 Median:
-```{r}
+```{r echo=TRUE}
 median(per_day$Total_Steps,na.rm=TRUE)
 ```
 As we are replacing the missing values with the average value per minute interval, there is no difference between the two sets (the one with missing values and the one with replaced values)
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r}
+```{r echo=TRUE}
 library(lubridate)
 replace_missing$Date<-ymd(replace_missing$date)
 #Use wday to detect if is Weekend (1 or 6) or Weekday

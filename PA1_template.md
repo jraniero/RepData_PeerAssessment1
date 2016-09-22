@@ -99,7 +99,7 @@ sum(is.na(raw_data$steps))
 ## [1] 2304
 ```
 
-Replace missing values with mean for that interval
+Replace missing values with mean for that interval, and check no NA remain afterwards
 
 ```r
 na_vector=is.na(raw_data$steps)
